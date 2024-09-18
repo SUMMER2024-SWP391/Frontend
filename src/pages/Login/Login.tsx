@@ -8,10 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import InputVerTwo from 'src/Components/InputVerTwo/InputVerTwo'
 import { useMutation } from '@tanstack/react-query'
 import { ErrorResponse } from 'src/@types/utils.type'
-import {
-  isAxiosUnauthorized,
-  isAxiosUnprocessableEntityError
-} from 'src/utils/utils'
+import { isAxiosUnauthorized, isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { Link, useNavigate } from 'react-router-dom'
 import { useContext, useState } from 'react'
 import { AppContext } from 'src/context/app.context'
@@ -22,19 +19,19 @@ import { googleAuthUrl } from 'src/utils/getGoogleAuthUrl'
 import { UserRole } from 'src/@types/enum'
 import Header from 'src/Components/HeaderHomePage/HeaderHomePage'
 import { clearEventIdFromLS, setIsStaffToLS } from 'src/utils/auth'
-import { toast } from 'react-toastify'
+import socket from 'src/socket/socket'
+// import { toast } from 'react-toastify'
 
 export type FormData = LoginSchema
 
 const Login = () => {
   const navigate = useNavigate()
-  const { setIsAuthenticated, setProfile, setIsStaff, eventId, setEventId } =
-    useContext(AppContext)
+  const { setIsAuthenticated, setProfile, setIsStaff, eventId, setEventId } = useContext(AppContext)
   const {
     register,
     handleSubmit,
     // setError,
-    trigger,
+    // trigger,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(LoginSchemaYup)
@@ -92,12 +89,7 @@ const Login = () => {
         <div className='flex flex-col w-[500px] items-start rounded-[15px] border border-solid border-black_light pb-5 sm:pt-5'>
           <div className='mx-[30px] w-[430px]'>
             <div className='flex flex-col items-start'>
-              <Button
-                color='pink_normail'
-                size='4xl'
-                shape='circle'
-                className='w-[68px] !rounded-[34px]'
-              >
+              <Button color='pink_normail' size='4xl' shape='circle' className='w-[68px] !rounded-[34px]'>
                 <UserOutlined className='' />
               </Button>
               <div className=' flex flex-col items-start mt-5'>
@@ -109,11 +101,7 @@ const Login = () => {
                 </Heading>
               </div>
             </div>
-            <form
-              className=' mt-5 w-full flex items-start flex-col '
-              noValidate
-              onSubmit={onSubmit}
-            >
+            <form className=' mt-5 w-full flex items-start flex-col ' noValidate onSubmit={onSubmit}>
               <div className='w-full flex flex-col  '>
                 <Heading size='lg' as='h3' className='!font-bold '>
                   Email
@@ -151,10 +139,7 @@ const Login = () => {
                 />
                 <span className=' text-red text-sm'>{loginError}</span>
               </div>
-              <Link
-                to={'/forgot-password'}
-                className='mt-5 text-black-900 hover:text-black-900 hover:underline'
-              >
+              <Link to={'/forgot-password'} className='mt-5 text-black-900 hover:text-black-900 hover:underline'>
                 Forgot password. Click here to get new password
               </Link>
               <Button
@@ -162,16 +147,16 @@ const Login = () => {
                 color='white_A700'
                 className='mt-[10px] w-full rounded-[10px] border border-solid border-black_light bg-pink-normail font-medium sm:px-5 hover:opacity-95'
               >
-                Sign In 
+                Sign In
               </Button>
               <div className='my-3 h-px w-full self-stretch bg-black_light opacity-50' />
-              
+
               <div className='grid grid-cols-2 gap-2'>
                 <Link
                   to={googleAuthUrl}
                   className=' flex flex-row bg-pink-normail mt-[10px] p-2 w-full rounded-[10px] border border-solid border-black_light font-medium sm:px-5 text-center hover:opacity-80 '
                 >
-                  <div className=""></div>
+                  <div className=''></div>
                   Sign in with FPT EDU Email
                 </Link>
                 <Link

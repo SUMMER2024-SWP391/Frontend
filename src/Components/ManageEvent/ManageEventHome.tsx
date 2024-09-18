@@ -26,7 +26,7 @@ export const ManageEventHome = ({ event }: Props) => {
     //name event
     <div className='flex flex-col container-xs'>
       <div className='flex flex-row items-center justify-between'>
-        <Heading as='h1' size='2xl' className='flex items-start !font-monterat'>
+        <Heading as='h1' size='2xl' className='w-[80%] flex items-start !font-monterat'>
           {event.name}
         </Heading>
         <Link

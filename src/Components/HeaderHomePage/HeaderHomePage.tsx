@@ -5,7 +5,7 @@ import { SearchOutlined } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
 import authAPI from 'src/apis/auth.api'
 import { AppContext } from 'src/context/app.context'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import path from 'src/constants/path'
 import { getRefreshTokenFromLS } from 'src/utils/auth'
 import { UserRole } from 'src/@types/enum'
@@ -19,6 +19,7 @@ import { useForm } from 'react-hook-form'
 import { SearchEventSchema, searchEventSchemaYup } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { toast } from 'react-toastify'
+import socket from 'src/socket/socket'
 
 interface Props {
   className?: string
@@ -31,13 +32,20 @@ type SearchForm = SearchEventSchema
 export default function Header({ ...props }: Props) {
   const [open, setOpen] = useState<boolean>(false)
   const navigate = useNavigate()
-  const {
-    setIsAuthenticated,
-    isAuthenticated,
-    setProfile,
-    profile,
-    setIsStaff
-  } = useContext(AppContext)
+  const { setIsAuthenticated, isAuthenticated, setProfile, profile, setIsStaff } = useContext(AppContext)
+
+  useEffect(() => {
+    if (isAuthenticated && profile) {
+      socket.auth = { _id: profile._id }
+      console.log(socket.auth)
+      socket.connect()
+    }
+
+    return () => {
+      socket.disconnect()
+    }
+  }, [])
+
   const logoutMutation = useMutation({
     mutationFn: (refresh_token: string) => authAPI.logout({ refresh_token }),
     onSuccess: () => {
@@ -85,10 +93,7 @@ export default function Header({ ...props }: Props) {
   return (
     <div className='w-full flex flex-col '>
       <div className='bg-gradient_header h-[150px] fixed z-[1] w-full opacity-[1]'></div>
-      <div
-        {...props}
-        className={`${props.className} w-full relative z-[100]  flex flex-row justify-around items-center md:w-full `}
-      >
+      <div {...props} className={`${props.className} w-full relative z-[100]  flex flex-row justify-around items-center md:w-full `}>
         <Heading as='h1' size='2xl' className=''>
           eventbok.
         </Heading>
@@ -129,9 +134,7 @@ export default function Header({ ...props }: Props) {
           />
           {!isAuthenticated ? (
             <Link to={path.login} className='w-20 h-8 '>
-              <div className='border border-solid border-black-900 rounded-lg text-center font-euclid font-bold'>
-                Log In
-              </div>
+              <div className='border border-solid border-black-900 rounded-lg text-center font-euclid font-bold'>Log In</div>
             </Link>
           ) : (
             <AvatarProfile onClick={handleLogout} />

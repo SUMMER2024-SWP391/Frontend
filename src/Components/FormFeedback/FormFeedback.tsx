@@ -9,6 +9,7 @@ import { Button, Modal } from 'antd'
 
 const FormFeedback = () => {
   const { id } = useParams()
+  console.log(id)
   const { data } = useQuery({
     queryKey: ['form_feedback'],
     queryFn: () => eventApi.getFormFeedback(id as string)

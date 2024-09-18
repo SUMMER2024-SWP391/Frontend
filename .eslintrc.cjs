@@ -12,7 +12,7 @@ module.exports = {
     'eslint-config-prettier',
     'prettier'
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'prettier'],
+  ignorePatterns: ['dist'],
   parser: '@typescript-eslint/parser',
   settings: {
     react: {
@@ -22,7 +22,7 @@ module.exports = {
     // Nói ESLint cách xử lý các import
     'import/resolver': {
       node: {
-        paths: [path.resolve(__dirname, '')],
+        paths: [path.resolve(__dirname)],
         extensions: ['.js', '.jsx', '.ts', '.tsx']
       }
     }
@@ -34,7 +34,7 @@ module.exports = {
   rules: {
     '@typescript/no-unused-vars': 'warn',
     'react-hooks/rules-of-hooks': 'error', //check rules of hooks
-    'react-hooks/exhaustive-deps': 'warn', //checks effect
+    'react-hooks/exhaustive-deps': 'error', //checks effect
     'react/react-in-jsx-scope': 'off',
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'prettier/prettier': [
